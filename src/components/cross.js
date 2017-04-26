@@ -1,4 +1,5 @@
 import React from 'react';
+import './cross.css';
 
 export default function Cross(props) {
     return (

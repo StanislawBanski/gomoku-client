@@ -1,9 +1,11 @@
 import React from 'react';
+import './playerPanel.css'
 
 export default class PlayerPanel extends React.Component {
     render () {
         return (
-            <div><p>{this.props.color}</p>
+            <div className="panel">
+                <h2>{this.props.color}</h2>
                 <p>
                     <input
                         type="checkbox"
@@ -23,6 +25,7 @@ export default class PlayerPanel extends React.Component {
                 <p>
                     <label htmlFor={`params_${this.props.player}`}>Parametry</label>
                     <textarea
+                        rows="8"
                         name={`params_${this.props.player}`}
                         id={`params_${this.props.player}`}
                     />

@@ -1,0 +1,16 @@
+.panel {
+    width: 45%;
+    display: inline-block;
+    text-align: left;
+    padding: 10px;
+    vertical-align: top;
+}
+
+.panel h2 {
+    text-align: center;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    max-width: 100%;
+}
