@@ -1,9 +1,11 @@
 const SWITCH_MOVE = 'SWITCH_MOVE';
 const CHECK_STATUS = 'CHECK_STATUS';
+const MAKE_TURN = 'MAKE_TURN';
 
 const initalState = {
     win: null,
-    move: true
+    move: true,
+    turn: 1,
 }
 
 export default function statusReducer(state = initalState, action) {
@@ -12,6 +14,8 @@ export default function statusReducer(state = initalState, action) {
             return Object.assign({}, state, {move: !state.move})
         case CHECK_STATUS:
             return checkGame(state, action.board, action.id);
+        case MAKE_TURN:
+            return Object.assign({}, state, {turn: state.turn + 1});
         default:
             return state;
     }
@@ -28,6 +32,12 @@ export function checkStatus(id, board) {
         type: CHECK_STATUS,
         id,
         board
+    }
+}
+
+export function incrementTurn() {
+    return {
+        type: MAKE_TURN
     }
 }
 

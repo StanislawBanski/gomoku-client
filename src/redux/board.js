@@ -1,4 +1,4 @@
-import { switchMove, checkStatus } from './status';
+import { switchMove, checkStatus, incrementTurn } from './status';
 
 const initialState = () => {
     const result = [];
@@ -36,6 +36,9 @@ export function makeMove(id, value) {
         ) {
             dispatch(setCross(id, value));
             dispatch(switchMove());
+            if (getState().status.move === true) {
+                dispatch(incrementTurn());
+            }
             dispatch(checkStatus(id, getState().board));
         }
     }
