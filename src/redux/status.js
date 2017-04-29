@@ -6,12 +6,13 @@ const initalState = {
     win: null,
     move: true,
     turn: 1,
+    filled: 0
 }
 
 export default function statusReducer(state = initalState, action) {
     switch (action.type) {
         case SWITCH_MOVE:
-            return Object.assign({}, state, {move: !state.move})
+            return Object.assign({}, state, {move: !state.move, filled: state.filled + 1})
         case CHECK_STATUS:
             return checkGame(state, action.board, action.id);
         case MAKE_TURN:
