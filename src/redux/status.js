@@ -7,6 +7,7 @@ const initalState = {
   move: true,
   turn: 1,
   filled: 0,
+  in_progress: false,
 };
 
 export default function statusReducer(state = initalState, action) {

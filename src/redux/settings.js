@@ -17,23 +17,25 @@ const SET_PARAMS = "SET_PARAMS";
 const SWITCH_PLAYERS = "SWITCH_PLAYERS";
 
 export default function settingsReducer(state = initialState, action) {
-  return state;
   switch (action.type) {
     case SET_COMPUTER:
       return Object.assign({}, state, {
         [action.player]: {
+          ...state[action.player],
           computer: action.value,
         },
       });
     case SET_ADDRESS:
       return Object.assign({}, state, {
         [action.player]: {
+          ...state[action.player],
           address: action.address,
         },
       });
     case SET_PARAMS:
       return Object.assign({}, state, {
         [action.player]: {
+          ...state[action.player],
           params: action.params,
         },
       });
