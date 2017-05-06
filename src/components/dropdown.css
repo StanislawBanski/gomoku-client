@@ -1,0 +1,15 @@
+select{
+   color: black;
+   background-color: white;
+   height: 30px;
+   width: 100%;
+}
+
+select:disabled, dropdown:disabled {
+    background-color: rgb(235, 235, 228);
+}
+
+dropdown{
+    height: 50px;
+    width: 100%;
+}

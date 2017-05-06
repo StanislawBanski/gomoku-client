@@ -20,7 +20,7 @@ class SwitchPlayer extends React.Component {
         onClick={this.handleSwitch}
         disabled={this.props.in_progress}
       >
-        Switch
+        Zmiana
       </button>
     );
   }

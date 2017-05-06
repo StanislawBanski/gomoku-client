@@ -1,6 +1,8 @@
 .switch {
-    display: inline-block;
-    width: 10%;
+    /*display: inline-block;*/
+    width: 30%;
     vertical-align: top;
-    margin-top: 80px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    float : left
 }

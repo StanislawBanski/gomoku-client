@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import "./status.css";
 
 class Status extends React.Component {
   render() {
     return (
-      <div>
+      <div className="statusParent">
         {this.props.win === null
-          ? <button>Start game</button>
+          ? <button>Graj</button>
           : <p>Win: {this.props.win ? "white" : "black"}</p>}
       </div>
     );

@@ -1,5 +1,7 @@
 .board {
-    margin: 30px 0;
+    width: 800px;
+    height: 800px;
+    float : right;
 }
 
 .board:after {

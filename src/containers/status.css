@@ -1,0 +1,9 @@
+.statusParent {
+    float: left;
+    text-align: left;
+    clear: none;
+    width: 30%;
+    vertical-align: top;
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
