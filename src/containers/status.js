@@ -24,7 +24,9 @@ class Status extends React.Component {
     if (this.props.in_progress && this.props.win === null) {
       result = (
         <div>
-          <p>Next move: {this.props.move ? 'white' : 'black'}</p>
+          {this.props.draw
+            ? <p>Draw</p>
+            : <p>Next move: {this.props.move ? 'white' : 'black'}</p>}
           <p>Turns: {this.props.turn}</p>
           <p>Stones placed: {this.props.filled}</p>
           <button onClick={this.resetGame}>Reset game</button>
@@ -51,6 +53,7 @@ const mapStateToProps = ({ status }) => {
     turn: status.turn,
     filled: status.filled,
     move: status.move,
+    draw: status.draw,
   };
 };
 

@@ -10,6 +10,7 @@ const initalState = {
   turn: 1,
   filled: 0,
   in_progress: false,
+  draw: false,
 };
 
 export default function statusReducer(state = initalState, action) {
@@ -73,6 +74,24 @@ function checkGame(state, board, id) {
   ) {
     return Object.assign({}, state, { win: board[id] });
   }
+  if (state.filled === 225) {
+    return Object.assign({}, state, { draw: true });
+  }
+  return state;
+}
+
+function checkGame(state, board, id) {
+  if (
+    checkLine(id, checkVerticalCell, board) ||
+    checkLine(id, checkHorizontalCell, board) ||
+    checkLine(id, checkDiagonalLeftCell, board) ||
+    checkLine(id, checkDiagonalRightCell, board)
+  ) {
+    return Object.assign({}, state, { win: board[id] });
+  }
+  if (state.filled === 225) {
+    return Object.assign({}, state, { draw: true });
+  }
   return state;
 }
 
@@ -102,19 +121,27 @@ function checkVerticalCell(currentId, distance, board) {
 }
 
 function checkHorizontalCell(currentId, distance, board) {
+  const otherId = currentId + distance;
   const row = Math.floor(currentId / 15);
-  const otherRowid = Math.floor((currentId + distance) / 15);
+  const otherRowid = Math.floor(otherId / 15);
   if (row !== otherRowid) {
     return null;
   } else {
-    return board[currentId + distance];
+    return board[otherId];
   }
 }
 
 function checkDiagonalLeftCell(currentId, distance, board) {
-  const otherId = currentId + 15 * distance - distance;
+  let otherId = currentId + 15 * distance;
+  if (distance < 0) {
+    otherId = otherId + distance;
+  } else {
+    otherId = otherId - distance;
+  }
   const outOfBoard = otherId < 0 || otherId > 224;
-  if (outOfBoard) {
+  const position = currentId % 15;
+  const outOfRow = position + distance < 0 || position + distance > 14;
+  if (outOfBoard || outOfRow) {
     return null;
   } else {
     return board[otherId];
@@ -122,9 +149,16 @@ function checkDiagonalLeftCell(currentId, distance, board) {
 }
 
 function checkDiagonalRightCell(currentId, distance, board) {
-  const otherId = currentId + 15 * distance + distance;
+  let otherId = currentId + 15 * distance;
+  if (distance < 0) {
+    otherId = otherId - distance;
+  } else {
+    otherId = otherId + distance;
+  }
   const outOfBoard = otherId < 0 || otherId > 224;
-  if (outOfBoard) {
+  const position = currentId % 15;
+  const outOfRow = position - distance < 0 || position - distance > 14;
+  if (outOfBoard || outOfRow) {
     return null;
   } else {
     return board[otherId];
