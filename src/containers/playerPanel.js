@@ -39,7 +39,7 @@ class PlayerPanel extends React.Component {
           <label htmlFor={`computer_${this.props.player}`}>Computer</label>
         </p>
         <p>
-          <label htmlFor={`url_${this.props.player}`}>Adres</label>
+          <label htmlFor={`url_${this.props.player}`}>Address</label>
           <input
             type="text"
             name={`url_${this.props.player}`}
@@ -53,7 +53,7 @@ class PlayerPanel extends React.Component {
           />
         </p>
         <p>
-          <label htmlFor={`params_${this.props.player}`}>Parametry</label>
+          <label htmlFor={`params_${this.props.player}`}>Params</label>
           <textarea
             rows="8"
             name={`params_${this.props.player}`}

@@ -25,7 +25,7 @@ class PreviewSwitch extends React.Component {
                     checked={this.props.preview}
                     onChange={this.previewHandler}
                 />
-                <label htmlFor="preview">Podgląd</label>
+                <label htmlFor="preview">Preview</label>
             </p>
         )
     }
