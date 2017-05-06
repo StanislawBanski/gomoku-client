@@ -80,29 +80,16 @@ function checkGame(state, board, id) {
   return state;
 }
 
-function checkGame(state, board, id) {
-  if (
-    checkLine(id, checkVerticalCell, board) ||
-    checkLine(id, checkHorizontalCell, board) ||
-    checkLine(id, checkDiagonalLeftCell, board) ||
-    checkLine(id, checkDiagonalRightCell, board)
-  ) {
-    return Object.assign({}, state, { win: board[id] });
-  }
-  if (state.filled === 225) {
-    return Object.assign({}, state, { draw: true });
-  }
-  return state;
-}
-
 function checkLine(currentId, fun, board) {
   for (let i = 0; i < 5; i++) {
     if (
+      board[currentId] !== fun(currentId, -1 - i, board) &&
       board[currentId] === fun(currentId, 0 - i, board) &&
       board[currentId] === fun(currentId, 1 - i, board) &&
       board[currentId] === fun(currentId, 2 - i, board) &&
       board[currentId] === fun(currentId, 3 - i, board) &&
-      board[currentId] === fun(currentId, 4 - i, board)
+      board[currentId] === fun(currentId, 4 - i, board) &&
+      board[currentId] !== fun(currentId, 5 - i, board)
     ) {
       return true;
     }
@@ -132,12 +119,7 @@ function checkHorizontalCell(currentId, distance, board) {
 }
 
 function checkDiagonalLeftCell(currentId, distance, board) {
-  let otherId = currentId + 15 * distance;
-  if (distance < 0) {
-    otherId = otherId + distance;
-  } else {
-    otherId = otherId - distance;
-  }
+  let otherId = currentId + 15 * distance + distance;
   const outOfBoard = otherId < 0 || otherId > 224;
   const position = currentId % 15;
   const outOfRow = position + distance < 0 || position + distance > 14;
@@ -149,12 +131,7 @@ function checkDiagonalLeftCell(currentId, distance, board) {
 }
 
 function checkDiagonalRightCell(currentId, distance, board) {
-  let otherId = currentId + 15 * distance;
-  if (distance < 0) {
-    otherId = otherId - distance;
-  } else {
-    otherId = otherId + distance;
-  }
+  let otherId = currentId + 15 * distance - distance;
   const outOfBoard = otherId < 0 || otherId > 224;
   const position = currentId % 15;
   const outOfRow = position - distance < 0 || position - distance > 14;
