@@ -47,7 +47,7 @@ class Status extends React.Component {
 
 const mapStateToProps = ({ status }) => {
    return {
-     win: status.win,
+    win: status.win,
     in_progress: status.in_progress,
     turn: status.turn,
     filled: status.filled,

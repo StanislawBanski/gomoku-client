@@ -1,4 +1,4 @@
-import { switchMove, checkStatus, incrementTurn, RESET_GAME } from "./status";
+import { switchMove, checkStatus, incrementTurn, RESET_GAME, wait } from "./status";
 
 const initialState = () => {
   const result = [];
@@ -266,6 +266,7 @@ export function checkAIMove(){
   return (dispatch, getState) => {
     const address= "localhost:4567/"
     let settings;
+    dispatch(wait(true));
     let state = getState();
     if(state.status.move === false){
       settings = state.settings[1];
@@ -296,6 +297,7 @@ export function checkAIMove(){
     then( res => {
       res.json().then(json => {
         state = getState();
+        dispatch(wait(false));
         dispatch(makeMove(json.move, state.status.move));
       })
     }
@@ -317,6 +319,7 @@ export function makeMove(id, value) {
       state.status.move === value &&
       state.board[id] === null &&
       state.status.win === null &&
+      !state.status.lock &&
       state.status.in_progress
     ) {
       dispatch(setCross(id, value));
