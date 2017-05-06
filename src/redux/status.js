@@ -1,8 +1,8 @@
-const SWITCH_MOVE = "SWITCH_MOVE";
-const CHECK_STATUS = "CHECK_STATUS";
-const MAKE_TURN = "MAKE_TURN";
-const START_GAME = "START_GAME";
-export const RESET_GAME = "RESET_GAME";
+const SWITCH_MOVE = 'SWITCH_MOVE';
+const CHECK_STATUS = 'CHECK_STATUS';
+const MAKE_TURN = 'MAKE_TURN';
+const START_GAME = 'START_GAME';
+export const RESET_GAME = 'RESET_GAME';
 
 const initalState = {
   win: null,
@@ -26,7 +26,7 @@ export default function statusReducer(state = initalState, action) {
     case RESET_GAME:
       return Object.assign({}, initalState);
     case START_GAME:
-      return Object.assign({}, state, {in_progress: true});
+      return Object.assign({}, state, { in_progress: true });
     default:
       return state;
   }
@@ -54,24 +54,79 @@ export function incrementTurn() {
 
 export function startGame() {
   return {
-    type: START_GAME
-  }
+    type: START_GAME,
+  };
 }
 
 export function resetGame() {
   return {
-    type: RESET_GAME
-  }
+    type: RESET_GAME,
+  };
 }
 
 function checkGame(state, board, id) {
   if (
-    board[id] === board[id - 1] &&
-    board[id] === board[id - 2] &&
-    board[id] === board[id - 3] &&
-    board[id] === board[id - 4]
+    checkLine(id, checkVerticalCell, board) ||
+    checkLine(id, checkHorizontalCell, board) ||
+    checkLine(id, checkDiagonalLeftCell, board) ||
+    checkLine(id, checkDiagonalRightCell, board)
   ) {
     return Object.assign({}, state, { win: board[id] });
   }
   return state;
+}
+
+function checkLine(currentId, fun, board) {
+  for (let i = 0; i < 5; i++) {
+    if (
+      board[currentId] === fun(currentId, 0 - i, board) &&
+      board[currentId] === fun(currentId, 1 - i, board) &&
+      board[currentId] === fun(currentId, 2 - i, board) &&
+      board[currentId] === fun(currentId, 3 - i, board) &&
+      board[currentId] === fun(currentId, 4 - i, board)
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function checkVerticalCell(currentId, distance, board) {
+  const otherId = currentId + 15 * distance;
+  const outOfBoard = otherId < 0 || otherId > 224;
+  if (outOfBoard) {
+    return null;
+  } else {
+    return board[otherId];
+  }
+}
+
+function checkHorizontalCell(currentId, distance, board) {
+  const row = Math.floor(currentId / 15);
+  const otherRowid = Math.floor((currentId + distance) / 15);
+  if (row !== otherRowid) {
+    return null;
+  } else {
+    return board[currentId + distance];
+  }
+}
+
+function checkDiagonalLeftCell(currentId, distance, board) {
+  const otherId = currentId + 15 * distance - distance;
+  const outOfBoard = otherId < 0 || otherId > 224;
+  if (outOfBoard) {
+    return null;
+  } else {
+    return board[otherId];
+  }
+}
+
+function checkDiagonalRightCell(currentId, distance, board) {
+  const otherId = currentId + 15 * distance + distance;
+  const outOfBoard = otherId < 0 || otherId > 224;
+  if (outOfBoard) {
+    return null;
+  } else {
+    return board[otherId];
+  }
 }
