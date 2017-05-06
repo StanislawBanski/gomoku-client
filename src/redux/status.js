@@ -1,6 +1,8 @@
 const SWITCH_MOVE = "SWITCH_MOVE";
 const CHECK_STATUS = "CHECK_STATUS";
 const MAKE_TURN = "MAKE_TURN";
+const START_GAME = "START_GAME";
+export const RESET_GAME = "RESET_GAME";
 
 const initalState = {
   win: null,
@@ -21,6 +23,10 @@ export default function statusReducer(state = initalState, action) {
       return checkGame(state, action.board, action.id);
     case MAKE_TURN:
       return Object.assign({}, state, { turn: state.turn + 1 });
+    case RESET_GAME:
+      return Object.assign({}, initalState);
+    case START_GAME:
+      return Object.assign({}, state, {in_progress: true});
     default:
       return state;
   }
@@ -44,6 +50,18 @@ export function incrementTurn() {
   return {
     type: MAKE_TURN,
   };
+}
+
+export function startGame() {
+  return {
+    type: START_GAME
+  }
+}
+
+export function resetGame() {
+  return {
+    type: RESET_GAME
+  }
 }
 
 function checkGame(state, board, id) {
