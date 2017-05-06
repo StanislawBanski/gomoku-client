@@ -3,13 +3,15 @@ const CHECK_STATUS = "CHECK_STATUS";
 const MAKE_TURN = "MAKE_TURN";
 const START_GAME = "START_GAME";
 export const RESET_GAME = "RESET_GAME";
+const DRAW = "DRAW";
 
 const initalState = {
   win: null,
   move: true,
   turn: 1,
-  filled: 0,
-  in_progress: false
+  filled: 222,
+  in_progress: false,
+  draw: false
 };
 
 export default function statusReducer(state = initalState, action) {
@@ -27,6 +29,8 @@ export default function statusReducer(state = initalState, action) {
       return Object.assign({}, initalState);
     case START_GAME:
       return Object.assign({}, state, { in_progress: true });
+    case DRAW:
+      return Object.assign({}, state, { in_progress: false });
     default:
       return state;
   }
@@ -64,6 +68,12 @@ export function resetGame() {
   };
 }
 
+export function draw() {
+  return {
+    type: DRAW
+  };
+}
+
 function checkGame(state, board, id) {
   if (
     checkLine(id, checkVerticalCell, board) ||
@@ -72,6 +82,9 @@ function checkGame(state, board, id) {
     checkLine(id, checkDiagonalRightCell, board)
   ) {
     return Object.assign({}, state, { win: board[id] });
+  }
+  if (state.filled === 225) {
+    return Object.assign({}, state, { draw: true });
   }
   return state;
 }
@@ -85,6 +98,7 @@ function checkLine(currentId, fun, board) {
       board[currentId] === fun(currentId, 3 - i, board) &&
       board[currentId] === fun(currentId, 4 - i, board)
     ) {
+      console.log(fun + "   " + i);
       return true;
     }
   }
@@ -104,7 +118,7 @@ function checkVerticalCell(currentId, distance, board) {
 function checkHorizontalCell(currentId, distance, board) {
   const otherId = currentId + distance;
   const row = Math.floor(currentId / 15);
-  const otherRowid = Math.floor((otherId) / 15);
+  const otherRowid = Math.floor(otherId / 15);
   if (row !== otherRowid) {
     return null;
   } else {
@@ -113,9 +127,17 @@ function checkHorizontalCell(currentId, distance, board) {
 }
 
 function checkDiagonalLeftCell(currentId, distance, board) {
-  const otherId = currentId + 15 * distance - distance;
+  let otherId = currentId + 15 * distance;
+  if(distance < 0){
+    otherId = otherId + distance;
+  }
+  else{
+    otherId = otherId - distance;
+  }
   const outOfBoard = otherId < 0 || otherId > 224;
-  if (outOfBoard) {
+  const position = currentId % 15;
+  const outOfRow = position + distance < 0 || position + distance > 14;
+  if (outOfBoard || outOfRow) {
     return null;
   } else {
     return board[otherId];
@@ -123,9 +145,17 @@ function checkDiagonalLeftCell(currentId, distance, board) {
 }
 
 function checkDiagonalRightCell(currentId, distance, board) {
-  const otherId = currentId + 15 * distance + distance;
+  let otherId = currentId + 15 * distance;
+  if(distance < 0){
+    otherId = otherId - distance;
+  }
+  else{
+    otherId = otherId + distance;
+  }
   const outOfBoard = otherId < 0 || otherId > 224;
-  if (outOfBoard) {
+  const position = currentId % 15;
+  const outOfRow = position - distance < 0 || position - distance > 14;
+  if (outOfBoard || outOfRow) {
     return null;
   } else {
     return board[otherId];
