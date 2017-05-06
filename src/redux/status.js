@@ -48,12 +48,69 @@ export function incrementTurn() {
 
 function checkGame(state, board, id) {
   if (
-    board[id] === board[id - 1] &&
-    board[id] === board[id - 2] &&
-    board[id] === board[id - 3] &&
-    board[id] === board[id - 4]
+    checkLine(id, checkVerticalCell, board) &&
+    checkLine(id, checkHorizontalCell, board) &&
+    checkLine(id, checkDiagonalLeftCell, board) &&
+    checkLine(id, checkDiagonalRightCell, board)
   ) {
     return Object.assign({}, state, { win: board[id] });
   }
   return state;
+}
+
+function checkLine(currentId, fun, board){
+  for (let i = 0 ; i < 5; i ++){
+    return (
+    board[currentId] === fun(currentId, 0 - i, board) &&
+    board[currentId] === fun(currentId, 1 - i, board) &&
+    board[currentId] === fun(currentId, 2 - i, board) &&
+    board[currentId] === fun(currentId, 3 - i, board) &&
+    board[currentId] === fun(currentId, 4 - i, board) 
+    )
+  }
+}
+
+function checkVerticalCell(currentId, distance, board){
+  var otherId = currentId + 15 * distance;
+  var inBoard = otherId  < 0 || otherId > 224;
+  if(!inBoard){
+    return null;
+  }
+  else{
+    return board[currentId + distance]
+  }
+}
+
+function checkHorizontalCell(currentId, distance, board){
+  var row = Math.floor(currentId/15);
+  
+  var otherRowid = Math.floor((currentId + distance)/15);
+  if(row !== otherRowid){
+    return null;
+  }
+  else{
+    return board[currentId + distance]
+  }
+}
+
+function checkDiagonalLeftCell(currentId, distance, board){
+  var otherId = currentId + (15 * distance) - distance;
+  var inBoard = otherId  < 0 || otherId > 224;
+  if(!inBoard){
+    return null;
+  }
+  else{
+    return board[currentId + distance]
+  }
+}
+
+function checkDiagonalRightCell(currentId, distance, board){
+  var otherId = currentId + (15 * distance) + distance;
+  var inBoard = otherId  < 0 || otherId > 224;
+  if(!inBoard){
+    return null;
+  }
+  else{
+    return board[currentId + distance]
+  }
 }
