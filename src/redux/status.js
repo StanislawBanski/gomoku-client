@@ -3,6 +3,7 @@ const CHECK_STATUS = 'CHECK_STATUS';
 const MAKE_TURN = 'MAKE_TURN';
 const START_GAME = 'START_GAME';
 export const RESET_GAME = 'RESET_GAME';
+const WAITING = 'WAITING';
 
 const initalState = {
   win: null,
@@ -11,6 +12,7 @@ const initalState = {
   filled: 0,
   in_progress: false,
   draw: false,
+  waiting: false,
 };
 
 export default function statusReducer(state = initalState, action) {
@@ -28,6 +30,8 @@ export default function statusReducer(state = initalState, action) {
       return Object.assign({}, initalState);
     case START_GAME:
       return Object.assign({}, state, { in_progress: true });
+    case WAITING:
+      return Object.assign({}, state, { waiting: action.value });
     default:
       return state;
   }
@@ -62,6 +66,13 @@ export function startGame() {
 export function resetGame() {
   return {
     type: RESET_GAME,
+  };
+}
+
+export function setWaiting(value) {
+  return {
+    type: WAITING,
+    value,
   };
 }
 
