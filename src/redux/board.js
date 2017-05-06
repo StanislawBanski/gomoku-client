@@ -252,6 +252,57 @@ export default function boardReducer(state = initialState(), action) {
   }
 }
 
+export function makeFirstStep() {
+  return (dispatch, getState) => {
+    const state = getState();
+    if((state.status.move === false && state.settings[1].computer) || 
+      (state.status.move === true && state.settings[2].computer)){
+        dispatch(checkAIMove());
+      } 
+  }
+}
+
+export function checkAIMove(){
+  return (dispatch, getState) => {
+    const address= "localhost:4567/"
+    let settings;
+    let state = getState();
+    if(state.status.move === false){
+      settings = state.settings[1];
+    }
+    else {
+      settings = state.settings[2];
+    }
+    const params = {
+      algorithm: settings.algorithm,
+      selectedHeuristic: settings.selectedAI,
+      turnTime: settings.turnTime,
+      depth: settings.depth
+    }
+    const options = {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+        cache: "default",
+        body: JSON.stringify({
+          params: params,
+          board: state.board,
+          move: state.status.move,
+          filled: state.status.filled
+        }),
+      };
+    fetch(`http://${address}`,options).
+    then( res => {
+      res.json().then(json => {
+        state = getState();
+        dispatch(makeMove(json.move, state.status.move));
+      })
+    }
+    ).catch(err => console.log(err))
+  }
+}
+
 export function setCross(id, value) {
   return {
     type: SET_CROSS,
@@ -261,18 +312,27 @@ export function setCross(id, value) {
 }
 export function makeMove(id, value) {
   return (dispatch, getState) => {
+    let state = getState();
     if (
-      getState().status.move === value &&
-      getState().board[id] === null &&
-      getState().status.win === null &&
-      +getState().status.in_progress
+      state.status.move === value &&
+      state.board[id] === null &&
+      state.status.win === null &&
+      state.status.in_progress
     ) {
       dispatch(setCross(id, value));
+      state = getState();
       dispatch(switchMove());
-      if (getState().status.move === false) {
+      state = getState();
+      if (state.status.move === false) {
         dispatch(incrementTurn());
+        state = getState();
       }
-      dispatch(checkStatus(id, getState().board));
+      dispatch(checkStatus(id, state.board));
+      state = getState();
+      if((state.status.move === false && state.settings[1].computer) || 
+      (state.status.move === true && state.settings[2].computer)){
+        dispatch(checkAIMove());
+      }      
     }
   };
 }
