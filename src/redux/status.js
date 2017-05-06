@@ -7,9 +7,9 @@ const DRAW = "DRAW";
 
 const initalState = {
   win: null,
-  move: true,
+  move: false,
   turn: 1,
-  filled: 222,
+  filled: 0,
   in_progress: false,
   draw: false
 };
@@ -92,11 +92,13 @@ function checkGame(state, board, id) {
 function checkLine(currentId, fun, board) {
   for (let i = 0; i < 5; i++) {
     if (
+      board[currentId] !== fun(currentId, -1 - i, board) &&
       board[currentId] === fun(currentId, 0 - i, board) &&
       board[currentId] === fun(currentId, 1 - i, board) &&
       board[currentId] === fun(currentId, 2 - i, board) &&
       board[currentId] === fun(currentId, 3 - i, board) &&
-      board[currentId] === fun(currentId, 4 - i, board)
+      board[currentId] === fun(currentId, 4 - i, board) &&
+      board[currentId] !== fun(currentId, 5 - i, board) 
     ) {
       console.log(fun + "   " + i);
       return true;
@@ -127,13 +129,7 @@ function checkHorizontalCell(currentId, distance, board) {
 }
 
 function checkDiagonalLeftCell(currentId, distance, board) {
-  let otherId = currentId + 15 * distance;
-  if(distance < 0){
-    otherId = otherId + distance;
-  }
-  else{
-    otherId = otherId - distance;
-  }
+  let otherId = currentId + 15 * distance + distance;
   const outOfBoard = otherId < 0 || otherId > 224;
   const position = currentId % 15;
   const outOfRow = position + distance < 0 || position + distance > 14;
@@ -145,13 +141,7 @@ function checkDiagonalLeftCell(currentId, distance, board) {
 }
 
 function checkDiagonalRightCell(currentId, distance, board) {
-  let otherId = currentId + 15 * distance;
-  if(distance < 0){
-    otherId = otherId - distance;
-  }
-  else{
-    otherId = otherId + distance;
-  }
+  let otherId = currentId + 15 * distance - distance;
   const outOfBoard = otherId < 0 || otherId > 224;
   const position = currentId % 15;
   const outOfRow = position - distance < 0 || position - distance > 14;
