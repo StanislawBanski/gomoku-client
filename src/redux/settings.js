@@ -9,12 +9,14 @@ const initialState = {
     address: "",
     params: "",
   },
+  preview: false
 };
 
 const SET_COMPUTER = "SET_COMPUTER";
 const SET_ADDRESS = "SET_ADDRESS";
 const SET_PARAMS = "SET_PARAMS";
 const SWITCH_PLAYERS = "SWITCH_PLAYERS";
+const SWITCH_PREVIEW = "SWITCH_PREVIEW";
 
 export default function settingsReducer(state = initialState, action) {
   switch (action.type) {
@@ -43,6 +45,10 @@ export default function settingsReducer(state = initialState, action) {
       return Object.assign({}, state, {
         1: state[2],
         2: state[1],
+      });
+    case SWITCH_PREVIEW:
+      return Object.assign({}, state, {
+        preview: action.value
       });
     default:
       return state;
@@ -77,4 +83,11 @@ export function switchPlayers() {
   return {
     type: SWITCH_PLAYERS,
   };
+}
+
+export function switchPreview(value) {
+  return {
+    type: SWITCH_PREVIEW,
+    value
+  }
 }
