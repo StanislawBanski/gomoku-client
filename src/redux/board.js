@@ -2,7 +2,7 @@ import { switchMove, checkStatus, incrementTurn } from "./status";
 
 const initialState = () => {
   const result = [];
-  for (let i = 0; i < 255; i++) {
+  for (let i = 0; i < 225; i++) {
     result[i] = null;
   }
   return result;
