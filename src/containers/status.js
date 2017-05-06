@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { startGame, resetGame } from './../redux/status';
+import { makeFirstMove } from './../redux/board';
 
 class Status extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class Status extends React.Component {
 
   startGame(event) {
     this.props.startGame();
+    this.props.makeFirstMove();
   }
 
   resetGame(event) {
@@ -65,6 +67,9 @@ const mapDispatchToProps = dispatch => {
     resetGame() {
       dispatch(resetGame());
     },
+    makeFirstMove() {
+      dispatch(makeFirstMove());
+    }
   };
 };
 
