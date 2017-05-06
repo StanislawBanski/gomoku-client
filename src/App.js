@@ -7,7 +7,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <p><b>Gomoku web client</b></p> 
         <Panel />              
         <Board />
       </div>

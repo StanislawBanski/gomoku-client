@@ -10,7 +10,7 @@ const slider = props => {
         min={props.min}
         max={props.max}
         value={props.value}
-        onchange={props.onChange}
+        onChange={props.change}
         disabled={props.disabled}
       />
       <span> {props.value} </span>

@@ -1,21 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./playerPanel.css";
-import { setComputer, setAI, setDepth, setAlgorithm } from "./../redux/settings";
+import { setComputer, setAI, setDepth, setAlgorithm, setTurnTime } from "./../redux/settings";
 import Dropdown from "../components/dropdown";
 import Slider from "../components/slider";
 
 class PlayerPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedAI: 0
-    };
-
     this.algorithmChange = this.algorithmChange.bind(this);
     this.depthChange = this.depthChange.bind(this);
     this.computerChange = this.computerChange.bind(this);
     this.computerPlayerChange = this.computerPlayerChange.bind(this);
+    this.turnTimeChange = this.turnTimeChange.bind(this);
   }
   
   computerChange(event) {
@@ -31,10 +28,11 @@ class PlayerPanel extends React.Component {
   }
 
   computerPlayerChange(event) {
-    this.setState({
-      selectedAI: event.target.value
-    });
     this.props.setAI(this.props.player, event.target.value);
+  }
+
+  turnTimeChange(event) {
+    this.props.setTurnTime(this.props.player, event.target.value);
   }
 
   AIoptions() {
@@ -75,15 +73,15 @@ class PlayerPanel extends React.Component {
         </div>
         <div>
           <div>
-            <label htmlFor={`selectedAI_${this.props.player}`}>
+            <label htmlFor={`selectedAlg_${this.props.player}`}>
               Wybrany algorytm:
             </label>
             <Dropdown
               name="AIalg"
               label="Select_Alg"
               data={this.AIalgorithms()}
-              value="0"
-              onChange={this.computerPlayerChange}
+              value={this.props.settings[this.props.player].algorithm}
+              onChange={this.algorithmChange}
               disabled={
                 this.props.in_progress ||
                   !this.props.settings[this.props.player].computer
@@ -100,7 +98,7 @@ class PlayerPanel extends React.Component {
               name="AIS"
               label="Select_AI"
               data={this.AIoptions()}
-              value="0"
+              value={this.props.settings[this.props.player].selectedAI}
               onChange={this.computerPlayerChange}
               disabled={
                 this.props.in_progress ||
@@ -116,10 +114,28 @@ class PlayerPanel extends React.Component {
             </label>
             <Slider
               name="AIdepth"
-              value="25"
+              value={this.props.settings[this.props.player].depth}
               min="0"
               max="100"
-              onChange={this.depthChange}
+              change={this.depthChange}
+              disabled={
+                this.props.in_progress ||
+                  !this.props.settings[this.props.player].computer
+              }
+            />
+          </div>
+        </div>
+        <div>
+          <div>
+            <label htmlFor={`time_${this.props.player}`}>
+              Czas tury dla algorytmu
+            </label>
+            <Slider
+              name="AItime"
+              value={this.props.settings[this.props.player].turnTime}
+              min="0"
+              max="100"
+              change={this.turnTimeChange}
               disabled={
                 this.props.in_progress ||
                   !this.props.settings[this.props.player].computer
@@ -145,6 +161,9 @@ const mapDispatchToProps = dispatch => {
     },
     setAlgorithm(player, value) {
       dispatch(setAlgorithm(player, value));
+    },
+    setTurnTime(player, value) {
+      dispatch(setTurnTime(player, value));
     }
   };
 };
