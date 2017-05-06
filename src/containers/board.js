@@ -24,7 +24,7 @@ class Board extends React.Component {
       />
     ));
 
-    return <div className="board">{(this.props.preview || !this.props.onlyAi) && crosses}</div>;
+    return <div className="board">{this.props.preview && crosses}</div>;
   }
 }
 
@@ -32,8 +32,7 @@ const mapStateToProps = state => {
   return {
     board: state.board,
     move: state.status.move,
-    preview: state.settings.preview,
-    onlyAi: state.settings[1].computer && state.settings[2].computer
+    preview: state.settings.preview || !(state.settings[1].computer && state.settings[2].computer),
   };
 };
 
