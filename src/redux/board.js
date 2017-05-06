@@ -1,4 +1,4 @@
-import { switchMove, checkStatus, incrementTurn } from "./status";
+import { switchMove, checkStatus, incrementTurn, RESET_GAME } from "./status";
 
 const initialState = () => {
   const result = [];
@@ -16,6 +16,8 @@ export default function boardReducer(state = initialState(), action) {
       const copy = [...state];
       copy[action.id] = action.value;
       return copy;
+    case RESET_GAME:
+      return initialState();
     default:
       return state;
   }
@@ -25,7 +27,7 @@ export function setCross(id, value) {
   return {
     type: SET_CROSS,
     id,
-    value,
+    value
   };
 }
 export function makeMove(id, value) {
@@ -33,7 +35,8 @@ export function makeMove(id, value) {
     if (
       getState().status.move === value &&
       getState().board[id] === null &&
-      getState().status.win === null
+      getState().status.win === null &&
+      +getState().status.in_progress
     ) {
       dispatch(setCross(id, value));
       dispatch(switchMove());
