@@ -41,7 +41,7 @@ export function makeMove(id, value) {
     ) {
       dispatch(setCross(id, value));
       dispatch(switchMove());
-      if (getState().status.move === true) {
+      if (getState().status.move === false) {
         dispatch(incrementTurn());
       }
       dispatch(checkStatus(id, getState().board));

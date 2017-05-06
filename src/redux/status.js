@@ -6,7 +6,7 @@ export const RESET_GAME = 'RESET_GAME';
 
 const initalState = {
   win: null,
-  move: true,
+  move: false,
   turn: 1,
   filled: 0,
   in_progress: false,
