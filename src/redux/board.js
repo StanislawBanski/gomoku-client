@@ -53,6 +53,13 @@ export function checkBotMove() {
     } else {
       settings = state.settings[2];
     }
+    let params;
+    try {
+      params = JSON.parse(settings.params);
+    } catch (e) {
+      params = {};
+      console.log('Wrong params: not JSON');
+    }
     const options = {
       method: 'POST',
       headers: new Headers({
@@ -60,7 +67,7 @@ export function checkBotMove() {
       }),
       cache: 'default',
       body: JSON.stringify({
-        params: settings.params,
+        params,
         board: state.board,
         move: state.status.move,
         filled: state.status.filled,
