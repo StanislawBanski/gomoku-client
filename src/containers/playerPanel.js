@@ -38,11 +38,12 @@ class PlayerPanel extends React.Component {
   AIoptions() {
     return [
       { value: 0, text: "Wybierz sztuczną inteligencje" },
-      { value: 1, text: "AI heurystyka 1" },
-      { value: 2, text: "AI heurystyka 2" },
-      { value: 3, text: "AI heurystyka 3" },
-      { value: 4, text: "AI heurystyka 4" },
-      { value: 5, text: "AI heurystyka 5" }
+      { value: 1, text: "Bazowy bez heurystyk" },
+      { value: 2, text: "AI heurystyka 1" },
+      { value: 3, text: "AI heurystyka 2" },
+      { value: 4, text: "AI heurystyka 3" },
+      { value: 5, text: "AI heurystyka 4" },
+      { value: 6, text: "AI heurystyka 5" }
     ];
   }
 
