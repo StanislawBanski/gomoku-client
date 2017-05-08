@@ -1,4 +1,10 @@
-import { switchMove, checkStatus, incrementTurn, RESET_GAME, setWaiting } from './status';
+import {
+  switchMove,
+  checkStatus,
+  incrementTurn,
+  RESET_GAME,
+  setWaiting,
+} from "./status";
 
 const initialState = () => {
   const result = [];
@@ -8,7 +14,7 @@ const initialState = () => {
   return result;
 };
 
-const SET_CROSS = 'SET_CROSS';
+const SET_CROSS = "SET_CROSS";
 
 export default function boardReducer(state = initialState(), action) {
   switch (action.type) {
@@ -58,14 +64,14 @@ export function checkBotMove() {
       params = JSON.parse(settings.params);
     } catch (e) {
       params = {};
-      console.log('Wrong params: not JSON');
+      console.log("Wrong params: not JSON");
     }
     const options = {
-      method: 'POST',
+      method: "POST",
       headers: new Headers({
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       }),
-      cache: 'default',
+      cache: "default",
       body: JSON.stringify({
         params,
         board: state.board,
@@ -75,12 +81,11 @@ export function checkBotMove() {
     };
     fetch(`http://${settings.address}`, options)
       .then(res => {
-        res.json()
-          .then(json => {
-            state = getState();
-            dispatch(setWaiting(false));
-            dispatch(makeMove(json.move, state.status.move));
-          })
+        res.json().then(json => {
+          state = getState();
+          dispatch(setWaiting(false));
+          dispatch(makeMove(json.move, state.status.move));
+        });
       })
       .catch(err => console.log(err));
   };
@@ -94,7 +99,8 @@ export function makeMove(id, value) {
       state.board[id] === null &&
       state.status.win === null &&
       !state.status.waiting &&
-      state.status.in_progress
+      state.status.in_progress &&
+      isMovePossible(id, state.status.filled)
     ) {
       dispatch(setCross(id, value));
       state = getState();
@@ -114,4 +120,29 @@ export function makeMove(id, value) {
       }
     }
   };
+}
+
+function isMovePossible(id, filled) {
+  if (filled > 2) {
+    return true;
+  } else if (filled === 2) {
+    return !((id >= 110 && id <= 114) ||
+      (id >= 95 && id <= 99) ||
+      (id >= 80 && id <= 84) ||
+      (id >= 125 && id <= 129) ||
+      (id >= 140 && id <= 144));
+  } else if (filled === 1) {
+    return (
+      id === 111 ||
+      id === 113 ||
+      id === 97 ||
+      id === 96 ||
+      id === 98 ||
+      id === 126 ||
+      id === 127 ||
+      id === 128
+    );
+  } else if (filled === 0) {
+    return id === 112;
+  }
 }
