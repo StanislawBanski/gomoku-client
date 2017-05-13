@@ -4,6 +4,7 @@ import {
   incrementTurn,
   RESET_GAME,
   setWaiting,
+  setLastTime,
 } from "./status";
 
 const initialState = () => {
@@ -52,6 +53,7 @@ export function makeFirstMove() {
 export function checkBotMove() {
   return (dispatch, getState) => {
     let settings;
+    let counter = Date.now();
     dispatch(setWaiting(true));
     let state = getState();
     if (state.status.move === false) {
@@ -84,6 +86,8 @@ export function checkBotMove() {
         res.json().then(json => {
           state = getState();
           dispatch(setWaiting(false));
+          const player = state.status.move ? 2 : 1;
+          dispatch(setLastTime(player, Date.now()-counter));
           dispatch(makeMove(json.move, state.status.move));
         });
       })

@@ -4,6 +4,7 @@ const MAKE_TURN = 'MAKE_TURN';
 const START_GAME = 'START_GAME';
 export const RESET_GAME = 'RESET_GAME';
 const WAITING = 'WAITING';
+const SET_LAST_TIME = 'SET_LAST_TIME';
 
 const initalState = {
   win: null,
@@ -13,6 +14,10 @@ const initalState = {
   in_progress: false,
   draw: false,
   waiting: false,
+  time_1: 0,
+  time_2: 0,
+  avg_time_1: 1,
+  avg_time_2: 1,
 };
 
 export default function statusReducer(state = initalState, action) {
@@ -24,6 +29,8 @@ export default function statusReducer(state = initalState, action) {
       });
     case CHECK_STATUS:
       return checkGame(state, action.board, action.id);
+    case SET_LAST_TIME:
+      return calculateLastTime(state, action.player, action.time);
     case MAKE_TURN:
       return Object.assign({}, state, { turn: state.turn + 1 });
     case RESET_GAME:
@@ -35,6 +42,14 @@ export default function statusReducer(state = initalState, action) {
     default:
       return state;
   }
+}
+
+export function setLastTime(player, time) {
+  return {
+    type: SET_LAST_TIME,
+    player,
+    time,
+  };
 }
 
 export function switchMove() {
@@ -74,6 +89,22 @@ export function setWaiting(value) {
     type: WAITING,
     value,
   };
+}
+
+function calculateLastTime(state, player, time) {
+  let avg = 0;
+  if (state.turn > 1) {
+    avg =
+      (state['avg_time_' + player] * (state.turn - 1) + time) /
+      (state.turn);
+  } else {
+    avg = time;
+  }
+  const newProps = {
+    ['time_' + player]: time,
+    ['avg_time_' + player]: avg,
+  };
+  return Object.assign({}, state, newProps);
 }
 
 function checkGame(state, board, id) {
